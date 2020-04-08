@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Order;
 use App\Exceptions\Forbidden;
 use App\Http\Controllers\Controller;
 use App\Manager\Order\OrderManager;
+use App\Service\Order\BuildGraphService;
 use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -125,13 +127,43 @@ class OrderController extends Controller
 
             $searchKeyword = $request->get('keyword');
             $searchField = $request->get('field');
-            if ($searchKeyword) {
-
+            if (!(empty($searchKeyword)) && !(empty($searchField))) {
                 $data = $this->manager->searchOrders($searchKeyword, $searchField);
             }
 
 
             return view('order.index', compact('data', 'searchKeyword', 'searchField'));
+        } catch (Forbidden $e) {
+
+            return abort($e->getCode());
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @param BuildGraphService $buildGraphService
+     * @return JsonResponse|void
+     * @throws Exception
+     */
+    public function orderGraph(Request $request, BuildGraphService $buildGraphService)
+    {
+        try {
+            $data = [];
+            $searchKeyword = $request->get('keyword');
+            $searchField = $request->get('field');
+            if (!(empty($searchKeyword)) && !(empty($searchField))) {
+                $data = $this->manager->searchOrders($searchKeyword, $searchField);
+            } elseif((empty($searchKeyword)) && (empty($searchField))) {
+                $data = $this->manager->getOrders();
+            }
+
+
+            $buildGraphService->dataSet($data);
+            $buildGraphService->build();
+            $graph = $buildGraphService->getGraph();
+
+            return $this->jsonResponse($graph);
+
         } catch (Forbidden $e) {
 
             return abort($e->getCode());

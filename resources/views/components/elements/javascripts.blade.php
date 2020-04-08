@@ -9,3 +9,6 @@
 <!--Chart-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+
+<!--General-->
+<script src="{{ asset('scripts/general.js?v=1') }}"></script>

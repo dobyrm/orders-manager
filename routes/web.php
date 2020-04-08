@@ -20,3 +20,4 @@ Route::redirect('/home', '/orders');
 // Orders resource
 Route::resource('orders', 'Order\OrderController');
 Route::get('orders/search/field', ['uses' => 'Order\OrderController@search'])->name('order.search');
+Route::get('orders/graph/build', ['uses' => 'Order\OrderController@orderGraph'])->name('order.graph');

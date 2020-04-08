@@ -9,7 +9,7 @@
             <form action="{{ route('order.search') }}" method="GET" name="search">
                 <div class="form-row">
                     <div class="col-md-8">
-                        <input type="text" name="keyword" class="form-control" placeholder="@lang('order.form.keyword')" value="@if(isset($searchKeyword)) {{$searchKeyword}} @endif">
+                        <input type="text" name="keyword" class="form-control" placeholder="@lang('order.form.keyword')" value="@if(isset($searchKeyword)){{$searchKeyword}}@endif">
                     </div>
                     <div class="col-md-3">
                         <select name="field" class="custom-select mr-sm-2">
