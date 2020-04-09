@@ -106,14 +106,28 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Default TO email addresses
+    |--------------------------------------------------------------------------
+    |
+    */
+
     'to_addresses' => [
-        'dobyrm@gmail.com',
-        'dobyrm+1@gmail.com',
+        'alexander@webscribble.com',
+        'nick@webscribble.com',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Default CC email addresses
+    |--------------------------------------------------------------------------
+    |
+    */
+
     'cc_addresses' => [
-        'dobyrm@gmail.com',
-        'dobyrm+1@gmail.com',
+        'alexander@webscribble.com',
+        'nick@webscribble.com',
     ],
 
 ];
