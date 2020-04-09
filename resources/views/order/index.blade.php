@@ -55,6 +55,16 @@
 
     <div class="row">
         <div class="col-md-12">
+            @if((isset($searchKeyword)) && (isset($searchField)))
+                <a href="{{ route('orders.send.report') }}?keyword={{ $searchKeyword  }}&field={{ $searchField }}"><h4>@lang('order.links.report')</h4></a>
+            @else
+                <a href="{{ route('orders.send.report') }}"><h4>@lang('order.links.report')</h4></a>
+            @endif
+            <div class="mb-3"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             <table id="orders" class="ui celled table" style="width:100%">
                 <thead>
                 <tr>

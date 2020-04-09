@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Manager\Client\ClientManager;
 use App\Manager\Order\OrderManager;
 use App\Manager\Product\ProductManager;
+use App\Service\Email\SenderService;
 use App\Service\Order\BuildGraphService;
 use Exception;
 use Illuminate\Contracts\View\Factory;
@@ -212,6 +213,36 @@ class OrderController extends Controller
 
             return $this->jsonResponse($graph);
 
+        } catch (Forbidden $e) {
+
+            return abort($e->getCode());
+        }
+    }
+
+    /**
+     * Send orders report to email
+     *
+     * @param Request $request
+     * @param SenderService $senderService
+     * @return void
+     * @throws Exception
+     */
+    public function orderSendReport(Request $request, SenderService $senderService)
+    {
+        try {
+            $orders = [];
+            $searchKeyword = $request->get('keyword');
+            $searchField = $request->get('field');
+            if (!(empty($searchKeyword)) && !(empty($searchField))) {
+                $orders = $this->manager->searchOrders($searchKeyword, $searchField);
+            } elseif((empty($searchKeyword)) && (empty($searchField))) {
+                $orders = $this->manager->getOrders();
+            }
+
+            // Send report to email
+            $senderService->ordersReport(config('mail.to_addresses'), $orders);
+
+            return back();
         } catch (Forbidden $e) {
 
             return abort($e->getCode());

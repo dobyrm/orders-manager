@@ -44,6 +44,16 @@ return [
         'update' => [
             'success' => 'Order updated',
         ],
-    ]
+    ],
+
+    'email' => [
+        'report' => [
+            'subject' => 'Orders report'
+        ]
+    ],
+
+    'links' => [
+        'report' => 'Email this report',
+    ],
 
 ];
