@@ -20,18 +20,18 @@ use Illuminate\View\View;
 class OrderController extends Controller
 {
     /**
-     * @var OrderManager $repository
+     * @var OrderManager $orderManager
      */
-    private $manager;
+    private $orderManager;
 
     /**
      * OrderController constructor.
      *
-     * @param OrderManager $manager
+     * @param OrderManager $orderManager
      */
-    public function __construct(OrderManager $manager)
+    public function __construct(OrderManager $orderManager)
     {
-        $this->manager = $manager;
+        $this->orderManager = $orderManager;
     }
 
     /**
@@ -43,7 +43,7 @@ class OrderController extends Controller
     public function index()
     {
         try {
-            $orders = $this->manager->getOrders();
+            $orders = $this->orderManager->getOrders();
 
             return view('order.index', compact('orders'));
         } catch (Forbidden $e) {
@@ -96,7 +96,7 @@ class OrderController extends Controller
     public function edit($id, ClientManager $clientManager, ProductManager $productManager)
     {
         try {
-            $order = $this->manager->getEditOrderById($id);
+            $order = $this->orderManager->getEditOrderById($id);
             $clients = $clientManager->getClients();
             $products = $productManager->getProducts();
 
@@ -127,7 +127,7 @@ class OrderController extends Controller
                 (int) $product,
                 (float) $total
             );
-            $validation = $this->manager->orderValidation($dataOrder);
+            $validation = $this->orderManager->orderValidation($dataOrder);
             if(!empty($validation)) {
 
                 return redirect('orders/' . $id . '/edit')
@@ -135,7 +135,7 @@ class OrderController extends Controller
                     ->withInput();
             }
 
-            $this->manager->updateOrder($dataOrder);
+            $this->orderManager->updateOrder($dataOrder);
 
             return back()->with('success', Lang::get('order.messages.update.success'));
         } catch (Forbidden $e) {
@@ -153,7 +153,7 @@ class OrderController extends Controller
     public function destroy($id)
     {
         try {
-            $this->manager->deleteOrder($id);
+            $this->orderManager->deleteOrder($id);
 
             return $this->jsonResponse();
         } catch (Forbidden $e) {
@@ -177,7 +177,7 @@ class OrderController extends Controller
             $searchKeyword = $request->get('keyword');
             $searchField = $request->get('field');
             if (!(empty($searchKeyword)) && !(empty($searchField))) {
-                $orders = $this->manager->searchOrders($searchKeyword, $searchField);
+                $orders = $this->orderManager->searchOrders($searchKeyword, $searchField);
             }
 
 
@@ -201,9 +201,9 @@ class OrderController extends Controller
             $searchKeyword = $request->get('keyword');
             $searchField = $request->get('field');
             if (!(empty($searchKeyword)) && !(empty($searchField))) {
-                $orders = $this->manager->searchOrders($searchKeyword, $searchField);
+                $orders = $this->orderManager->searchOrders($searchKeyword, $searchField);
             } elseif((empty($searchKeyword)) && (empty($searchField))) {
-                $orders = $this->manager->getOrders();
+                $orders = $this->orderManager->getOrders();
             }
 
 
@@ -234,9 +234,9 @@ class OrderController extends Controller
             $searchKeyword = $request->get('keyword');
             $searchField = $request->get('field');
             if (!(empty($searchKeyword)) && !(empty($searchField))) {
-                $orders = $this->manager->searchOrders($searchKeyword, $searchField);
+                $orders = $this->orderManager->searchOrders($searchKeyword, $searchField);
             } elseif((empty($searchKeyword)) && (empty($searchField))) {
-                $orders = $this->manager->getOrders();
+                $orders = $this->orderManager->getOrders();
             }
 
             // Send report to email

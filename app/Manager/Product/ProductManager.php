@@ -11,18 +11,18 @@ use Exception;
 final class ProductManager extends BaseManager
 {
     /**
-     * @var ProductRepository $repository
+     * @var ProductRepository $productRepository
      */
-    private $repository;
+    private $productRepository;
 
     /**
-     * OrderManager constructor.
+     * ProductManager constructor.
      *
-     * @param ProductRepository $repository
+     * @param ProductRepository $productRepository
      */
-    public function __construct(ProductRepository $repository)
+    public function __construct(ProductRepository $productRepository)
     {
-        $this->repository = $repository;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -36,7 +36,7 @@ final class ProductManager extends BaseManager
         $data = [];
 
         try {
-            $result = $this->repository->getAll();
+            $result = $this->productRepository->getAll();
         } catch (Exception $e) {
             throw new Exception('Not data', 204);
         }

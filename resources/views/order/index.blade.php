@@ -42,7 +42,7 @@
     <div class="mb-3"></div>
     @if(isset($searchKeyword))
         <p>@lang('general.messages.search.result')</p>
-        <a href="{{ route('orders.index') }}">@lang('general.links.labels.home_page')</a>
+        <a href="{{ route('orders.index') }}" class="btn btn-primary btn-sm">@lang('general.links.labels.home_page')</a>
     @endif
     <div class="mb-5"></div>
 
@@ -56,9 +56,9 @@
     <div class="row">
         <div class="col-md-12">
             @if((isset($searchKeyword)) && (isset($searchField)))
-                <a href="{{ route('orders.send.report') }}?keyword={{ $searchKeyword  }}&field={{ $searchField }}"><h4>@lang('order.links.report')</h4></a>
+                <a href="{{ route('orders.send.report') }}?keyword={{ $searchKeyword  }}&field={{ $searchField }}" class="btn btn-primary btn-sm">@lang('order.links.report')</a>
             @else
-                <a href="{{ route('orders.send.report') }}"><h4>@lang('order.links.report')</h4></a>
+                <a href="{{ route('orders.send.report') }}" class="btn btn-primary btn-sm">@lang('order.links.report')</a>
             @endif
             <div class="mb-3"></div>
         </div>

@@ -16,18 +16,18 @@ use Exception;
 final class OrderManager extends BaseManager
 {
     /**
-     * @var OrderRepository $repository
+     * @var OrderRepository $orderRepository
      */
-    private $repository;
+    private $orderRepository;
 
     /**
      * OrderManager constructor.
      *
-     * @param OrderRepository $repository
+     * @param OrderRepository $orderRepository
      */
-    public function __construct(OrderRepository $repository)
+    public function __construct(OrderRepository $orderRepository)
     {
-        $this->repository = $repository;
+        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -41,7 +41,7 @@ final class OrderManager extends BaseManager
         $data = [];
 
         try {
-            $result = $this->repository->getAll();
+            $result = $this->orderRepository->getAll();
         } catch (Exception $e) {
             throw new Exception('Not data', 204);
         }
@@ -68,7 +68,7 @@ final class OrderManager extends BaseManager
         $data = null;
 
         try {
-            $result = $this->repository->getById($id);
+            $result = $this->orderRepository->getById($id);
         } catch (Exception $e) {
             throw new Exception('Not data', 204);
         }
@@ -88,7 +88,7 @@ final class OrderManager extends BaseManager
      */
     public function deleteOrder(int $id): bool
     {
-        if ($this->repository->delete($id)) {
+        if ($this->orderRepository->delete($id)) {
 
             return true;
         }
@@ -121,14 +121,14 @@ final class OrderManager extends BaseManager
                         break;
                     }
 
-                    $result = $this->repository->searchByOptions($keyword, 'total');
+                    $result = $this->orderRepository->searchByOptions($keyword, 'total');
                     if ($result->count() != 0) {
                         break;
                     }
 
                     $time = strtotime($keyword);
                     $date = date('Y-m-d', $time);
-                    $result = $this->repository->searchByOptions($date, 'created_at');
+                    $result = $this->orderRepository->searchByOptions($date, 'created_at');
                     break;
                 case 'client':
                     $clientRepository = new ClientRepository();
@@ -139,12 +139,12 @@ final class OrderManager extends BaseManager
                     $result = $productRepository->searchByOptions($keyword, 'name');
                     break;
                 case 'total':
-                    $result = $this->repository->searchByOptions($keyword, 'total');
+                    $result = $this->orderRepository->searchByOptions($keyword, 'total');
                     break;
                 case 'date':
                     $time = strtotime($keyword);
                     $date = date('Y-m-d', $time);
-                    $result = $this->repository->searchByOptions($date, 'created_at');
+                    $result = $this->orderRepository->searchByOptions($date, 'created_at');
                     break;
                 default:
                     $result = Order::all();
@@ -174,17 +174,17 @@ final class OrderManager extends BaseManager
     /**
      * Order validation data from request
      *
-     * @param UpdateOrderCollectionDto $order
+     * @param UpdateOrderCollectionDto $updateOrderCollectionDto
      * @return array
      */
-    public function orderValidation(UpdateOrderCollectionDto $order)
+    public function orderValidation(UpdateOrderCollectionDto $updateOrderCollectionDto)
     {
         $validationRules = [];
         $validationRules['id'] = 'required|exists:orders|numeric|min:1';
         $validationRules['client_id'] = 'required|numeric';
         $validationRules['product_id'] = 'required|numeric';
         $validationRules['total'] = 'required|numeric';
-        $validator = Validator::make($order->toArray(), $validationRules);
+        $validator = Validator::make($updateOrderCollectionDto->toArray(), $validationRules);
         // Checked validation on model rules
 
         $errors = [];
@@ -203,12 +203,12 @@ final class OrderManager extends BaseManager
     /**
      * Update data order
      *
-     * @param UpdateOrderCollectionDto $order
+     * @param UpdateOrderCollectionDto $updateOrderCollectionDto
      * @return bool
      */
-    public function updateOrder(UpdateOrderCollectionDto $order): bool
+    public function updateOrder(UpdateOrderCollectionDto $updateOrderCollectionDto): bool
     {
-        if ($this->repository->update($order)) {
+        if ($this->orderRepository->update($updateOrderCollectionDto)) {
 
             return true;
         }

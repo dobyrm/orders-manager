@@ -108,12 +108,12 @@ return [
 
     'to_addresses' => [
         'dobyrm@gmail.com',
-        'dobyrm+1@gmail.com'
+        'dobyrm+1@gmail.com',
     ],
 
     'cc_addresses' => [
         'dobyrm@gmail.com',
-        'dobyrm+1@gmail.com'
+        'dobyrm+1@gmail.com',
     ],
 
 ];

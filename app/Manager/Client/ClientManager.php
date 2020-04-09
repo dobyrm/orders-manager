@@ -11,18 +11,18 @@ use Exception;
 final class ClientManager extends BaseManager
 {
     /**
-     * @var ClientRepository $repository
+     * @var ClientRepository $clientRepository
      */
-    private $repository;
+    private $clientRepository;
 
     /**
-     * OrderManager constructor.
+     * ClientManager constructor.
      *
-     * @param ClientRepository $repository
+     * @param ClientRepository $clientRepository
      */
-    public function __construct(ClientRepository $repository)
+    public function __construct(ClientRepository $clientRepository)
     {
-        $this->repository = $repository;
+        $this->clientRepository = $clientRepository;
     }
 
     /**
@@ -36,7 +36,7 @@ final class ClientManager extends BaseManager
         $data = [];
 
         try {
-            $result = $this->repository->getAll();
+            $result = $this->clientRepository->getAll();
         } catch (Exception $e) {
             throw new Exception('Not data', 204);
         }

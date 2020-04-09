@@ -44,16 +44,16 @@ final class OrderRepository implements RepositoryInterface
     /**
      * Find order and update order data in structure
      *
-     * @param UpdateOrderCollectionDto $order
+     * @param UpdateOrderCollectionDto $updateOrderCollectionDto
      * @return bool
      */
-    public function update(UpdateOrderCollectionDto $order): bool
+    public function update(UpdateOrderCollectionDto $updateOrderCollectionDto): bool
     {
-        $entity = Order::findOrFail($order->getId());
+        $entity = Order::findOrFail($updateOrderCollectionDto->getId());
 
-        $entity->client_id = $order->getClientId();
-        $entity->product_id = $order->getProductId();
-        $entity->total = $order->getTotal();
+        $entity->client_id = $updateOrderCollectionDto->getClientId();
+        $entity->product_id = $updateOrderCollectionDto->getProductId();
+        $entity->total = $updateOrderCollectionDto->getTotal();
 
         if ($entity->save()) {
 
