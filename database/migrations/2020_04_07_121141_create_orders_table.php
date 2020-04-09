@@ -21,7 +21,7 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->integer('client_id')->index('client_id');
             $table->integer('product_id')->index('product_id');
-            $table->integer('total')->index('total');
+            $table->decimal('total', 15, 2)->index('total');
             $table->timestamps();
         });
     }

@@ -2,12 +2,15 @@
 
 namespace App\Manager\Order;
 
+use App\Dto\Order\EditOrderCollectionDto;
 use App\Dto\Order\OrderCollectionDto;
+use App\Dto\Order\UpdateOrderCollectionDto;
 use App\Manager\BaseManager;
 use App\Models\Order;
 use App\Repository\Client\ClientRepository;
 use App\Repository\Order\OrderRepository;
 use App\Repository\Product\ProductRepository;
+use Illuminate\Support\Facades\Validator;
 use Exception;
 
 final class OrderManager extends BaseManager
@@ -54,12 +57,36 @@ final class OrderManager extends BaseManager
     }
 
     /**
+     * Get data for edit form
+     *
+     * @param $id
+     * @return EditOrderCollectionDto
+     * @throws Exception
+     */
+    public function getEditOrderById($id): EditOrderCollectionDto
+    {
+        $data = null;
+
+        try {
+            $result = $this->repository->getById($id);
+        } catch (Exception $e) {
+            throw new Exception('Not data', 204);
+        }
+
+        if (!empty($result)) {
+            $data = $this->editCollection($result);
+        }
+
+        return $data;
+    }
+
+    /**
      * Delete row by id from structure
      *
      * @param int $id
      * @return bool
      */
-    public function delete(int $id): bool
+    public function deleteOrder(int $id): bool
     {
         if ($this->repository->delete($id)) {
 
@@ -145,6 +172,51 @@ final class OrderManager extends BaseManager
     }
 
     /**
+     * Order validation data from request
+     *
+     * @param UpdateOrderCollectionDto $order
+     * @return array
+     */
+    public function orderValidation(UpdateOrderCollectionDto $order)
+    {
+        $validationRules = [];
+        $validationRules['id'] = 'required|exists:orders|numeric|min:1';
+        $validationRules['client_id'] = 'required|numeric';
+        $validationRules['product_id'] = 'required|numeric';
+        $validationRules['total'] = 'required|numeric';
+        $validator = Validator::make($order->toArray(), $validationRules);
+        // Checked validation on model rules
+
+        $errors = [];
+        if (!empty($validator->errors()->getMessages())) {
+            $errorMessages = $validator->errors()->getMessages();
+            foreach ($errorMessages as $errorsField) {
+                foreach ($errorsField as $errorMessage) {
+                    $errors[] = $errorMessage;
+                }
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Update data order
+     *
+     * @param UpdateOrderCollectionDto $order
+     * @return bool
+     */
+    public function updateOrder(UpdateOrderCollectionDto $order): bool
+    {
+        if ($this->repository->update($order)) {
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Collection data by format
      *
      * @param Order $row
@@ -158,7 +230,28 @@ final class OrderManager extends BaseManager
             (int) $row->id,
             (string) $row->client->name,
             (string) $row->product->name,
-            (int) $row->total,
+            (float) $row->total,
+            (string) $data
+        );
+    }
+
+    /**
+     * Collection data by format for edit form
+     *
+     * @param Order $row
+     * @return EditOrderCollectionDto
+     */
+    private function editCollection(Order $row): EditOrderCollectionDto
+    {
+        $data = $row->created_at->format('n/j/Y');
+
+        return new EditOrderCollectionDto(
+            (int) $row->id,
+            (int) $row->client->id,
+            (string) $row->client->name,
+            (int) $row->product->id,
+            (string) $row->product->name,
+            (float) $row->total,
             (string) $data
         );
     }

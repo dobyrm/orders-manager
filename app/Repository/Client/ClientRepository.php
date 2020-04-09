@@ -4,20 +4,22 @@ namespace App\Repository\Client;
 
 use App\Models\Client;
 use App\Repository\RepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 final class ClientRepository implements RepositoryInterface
 {
     /**
-     * Get orders from structure orders
+     * Get clients from structure
      *
+     * @return Client[]|Collection
      */
     public function getAll()
     {
-        //
+        return Client::all();
     }
 
     /**
-     * Get order data from structure orders
+     * Get client data from structure
      *
      * @param int $id
      */
@@ -41,7 +43,7 @@ final class ClientRepository implements RepositoryInterface
      *
      * @param string $keyword
      * @param string $field
-     * @return mixed
+     * @return Client[]|Collection
      */
     public function searchByOptions(string $keyword, string $field)
     {

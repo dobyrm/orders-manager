@@ -25,9 +25,9 @@ return [
     ],
 
     'messages' => [
-      'search' => [
-          'result' => 'Search Results',
-      ]
+        'search' => [
+            'result' => 'Search Results',
+        ]
     ],
 
     'links' => [

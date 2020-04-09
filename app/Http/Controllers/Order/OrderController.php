@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Order;
 
+use App\Dto\Order\UpdateOrderCollectionDto;
 use App\Exceptions\Forbidden;
 use App\Http\Controllers\Controller;
+use App\Manager\Client\ClientManager;
 use App\Manager\Order\OrderManager;
+use App\Manager\Product\ProductManager;
 use App\Service\Order\BuildGraphService;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -38,9 +42,9 @@ class OrderController extends Controller
     public function index()
     {
         try {
-            $data = $this->manager->getOrders();
+            $orders = $this->manager->getOrders();
 
-            return view('order.index', compact('data'));
+            return view('order.index', compact('orders'));
         } catch (Forbidden $e) {
 
             return abort($e->getCode());
@@ -83,11 +87,23 @@ class OrderController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
+     * @param ClientManager $clientManager
+     * @param ProductManager $productManager
      * @return void
+     * @throws Exception
      */
-    public function edit($id)
+    public function edit($id, ClientManager $clientManager, ProductManager $productManager)
     {
-        //
+        try {
+            $order = $this->manager->getEditOrderById($id);
+            $clients = $clientManager->getClients();
+            $products = $productManager->getProducts();
+
+            return view('order.edit', compact('order', 'clients', 'products'));
+        } catch (Forbidden $e) {
+
+            return abort($e->getCode());
+        }
     }
 
     /**
@@ -99,7 +115,32 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $client = $request->get('client', '');
+            $product = $request->get('product', '');
+            $total = $request->get('total', '');
+
+            $dataOrder = new UpdateOrderCollectionDto(
+                (int) $id,
+                (int) $client,
+                (int) $product,
+                (float) $total
+            );
+            $validation = $this->manager->orderValidation($dataOrder);
+            if(!empty($validation)) {
+
+                return redirect('orders/' . $id . '/edit')
+                    ->withErrors($validation)
+                    ->withInput();
+            }
+
+            $this->manager->updateOrder($dataOrder);
+
+            return back()->with('success', Lang::get('order.messages.update.success'));
+        } catch (Forbidden $e) {
+
+            return abort($e->getCode());
+        }
     }
 
     /**
@@ -111,7 +152,7 @@ class OrderController extends Controller
     public function destroy($id)
     {
         try {
-            $this->manager->delete($id);
+            $this->manager->deleteOrder($id);
 
             return $this->jsonResponse();
         } catch (Forbidden $e) {
@@ -130,16 +171,16 @@ class OrderController extends Controller
     public function search(Request $request)
     {
         try {
-            $data = [];
+            $orders = [];
 
             $searchKeyword = $request->get('keyword');
             $searchField = $request->get('field');
             if (!(empty($searchKeyword)) && !(empty($searchField))) {
-                $data = $this->manager->searchOrders($searchKeyword, $searchField);
+                $orders = $this->manager->searchOrders($searchKeyword, $searchField);
             }
 
 
-            return view('order.index', compact('data', 'searchKeyword', 'searchField'));
+            return view('order.index', compact('orders', 'searchKeyword', 'searchField'));
         } catch (Forbidden $e) {
 
             return abort($e->getCode());
@@ -155,17 +196,17 @@ class OrderController extends Controller
     public function orderGraph(Request $request, BuildGraphService $buildGraphService)
     {
         try {
-            $data = [];
+            $orders = [];
             $searchKeyword = $request->get('keyword');
             $searchField = $request->get('field');
             if (!(empty($searchKeyword)) && !(empty($searchField))) {
-                $data = $this->manager->searchOrders($searchKeyword, $searchField);
+                $orders = $this->manager->searchOrders($searchKeyword, $searchField);
             } elseif((empty($searchKeyword)) && (empty($searchField))) {
-                $data = $this->manager->getOrders();
+                $orders = $this->manager->getOrders();
             }
 
 
-            $buildGraphService->dataSet($data);
+            $buildGraphService->dataSet($orders);
             $buildGraphService->build();
             $graph = $buildGraphService->getGraph();
 

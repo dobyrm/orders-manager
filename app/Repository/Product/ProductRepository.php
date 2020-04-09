@@ -3,20 +3,23 @@
 namespace App\Repository\Product;
 
 use App\Models\Product;
+use App\Repository\RepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 
-final class ProductRepository
+final class ProductRepository implements RepositoryInterface
 {
     /**
-     * Get orders from structure orders
+     * Get products from structure
      *
+     * @return Product[]|Collection
      */
     public function getAll()
     {
-        //
+        return Product::all();
     }
 
     /**
-     * Get order data from structure orders
+     * Get product data from structure
      *
      * @param int $id
      */
@@ -40,7 +43,7 @@ final class ProductRepository
      *
      * @param string $keyword
      * @param string $field
-     * @return mixed
+     * @return Product[]|Collection
      */
     public function searchByOptions(string $keyword, string $field)
     {

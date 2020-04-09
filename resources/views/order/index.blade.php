@@ -6,7 +6,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <form action="{{ route('order.search') }}" method="GET" name="search">
+            <form action="{{ route('orders.search') }}" method="GET" name="search">
                 <div class="form-row">
                     <div class="col-md-8">
                         <input type="text" name="keyword" class="form-control" placeholder="@lang('order.form.keyword')" value="@if(isset($searchKeyword)){{$searchKeyword}}@endif">
@@ -66,14 +66,14 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($data as $index => $row)
+                @foreach ($orders as $index => $row)
                     <tr>
                         <td>{{ $row->getClient() }}</td>
                         <td>{{ $row->getProduct() }}</td>
                         <td>{{ $row->getTotal() }}</td>
                         <td>{{ $row->getDate() }}</td>
                         <td>
-                            <a href="#" class="btn btn-primary btn-sm">@lang('general.form.btn.edit')</a>
+                            <a href="{{ route('orders.edit', $row->getId()) }}" class="btn btn-primary btn-sm">@lang('general.form.btn.edit')</a>
                             <a href="javascript:void(0);" class="btn btn-primary btn-sm order-destroy" data-id="{{ $row->getId() }}">@lang('general.form.btn.delete')</a>
                         </td>
                     </tr>

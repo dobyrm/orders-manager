@@ -15,7 +15,11 @@ return [
 
     'order' => [
         'title' => 'Orders',
-        'sub_title' => 'Welcome to orders manager!'
+        'sub_title' => 'Welcome to orders manager!',
+    ],
+
+    'edit_order' => [
+        'sub_title' => 'Edit order data',
     ],
 
     'form' => [
@@ -34,6 +38,12 @@ return [
             'total' => 'Total',
             'date' => 'Date',
         ]
+    ],
+
+    'messages' => [
+        'update' => [
+            'success' => 'Order updated',
+        ],
     ]
 
 ];

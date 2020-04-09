@@ -20,7 +20,7 @@ final class OrderCollectionDto
     private $product;
 
     /**
-     * @var int $total
+     * @var float $total
      */
     private $total;
 
@@ -35,14 +35,14 @@ final class OrderCollectionDto
      * @param int $id
      * @param string $client
      * @param string $product
-     * @param int $total
+     * @param float $total
      * @param string $date
      */
     public function __construct(
         int $id,
         string $client,
         string $product,
-        int $total,
+        float $total,
         string $date
     )
     {
@@ -78,9 +78,9 @@ final class OrderCollectionDto
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getTotal(): int
+    public function getTotal(): float
     {
         return $this->total;
     }
