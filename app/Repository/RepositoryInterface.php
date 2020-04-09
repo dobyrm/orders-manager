@@ -8,5 +8,7 @@ interface RepositoryInterface
 
     public function getById(int $id);
 
+    public function delete(int $id);
+
     public function searchByOptions(string $keyword, string $field);
 }

@@ -48,9 +48,27 @@ function Order() {
             }
         }, function (response) {});
     };
+
+    this.destroy = function (id) {
+        doAjaxCall('orders/' + id, 'DELETE', [], function (response) {
+            window.location.reload();
+        }, function (response) {});
+    };
 }
 
 Order = new Order();
 
 let urlParams = new URLSearchParams(window.location.search);
 Order.graphBuild(urlParams.toString());
+
+$(document).on('click', '.order-destroy', function (e) {
+    e.preventDefault();
+    $('.modal-destroy').modal('toggle');
+
+    let orderId = $(this).attr('data-id');
+    $(document).on('click', '.destroy-yes', function (e) {
+        e.preventDefault();
+
+        Order.destroy(orderId);
+    });
+});

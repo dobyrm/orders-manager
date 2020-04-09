@@ -54,6 +54,22 @@ final class OrderManager extends BaseManager
     }
 
     /**
+     * Delete row by id from structure
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function delete(int $id): bool
+    {
+        if ($this->repository->delete($id)) {
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @param string $keyword
      * @param string $field
      * @return array

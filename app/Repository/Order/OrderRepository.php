@@ -26,6 +26,17 @@ final class OrderRepository
     }
 
     /**
+     * Delete row by id from structure
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function delete(int $id)
+    {
+        return Order::findOrFail($id)->delete();
+    }
+
+    /**
      * Search by options in structure
      *
      * @param string $keyword

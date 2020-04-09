@@ -42,4 +42,14 @@ return [
         ],
     ],
 
+    'modals' => [
+        'destroy' => [
+            'message' => 'Delete entry'
+        ],
+        'btn' => [
+            'yes' => 'Yes',
+            'no' => 'No',
+        ]
+    ]
+
 ];

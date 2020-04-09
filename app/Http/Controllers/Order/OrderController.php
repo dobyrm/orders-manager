@@ -106,11 +106,18 @@ class OrderController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return void
+     * @return JsonResponse|void
      */
     public function destroy($id)
     {
-        //
+        try {
+            $this->manager->delete($id);
+
+            return $this->jsonResponse();
+        } catch (Forbidden $e) {
+
+            return abort($e->getCode());
+        }
     }
 
     /**

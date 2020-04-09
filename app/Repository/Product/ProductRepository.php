@@ -26,6 +26,16 @@ final class ProductRepository
     }
 
     /**
+     * Delete row by id from structure
+     *
+     * @param int $id
+     */
+    public function delete(int $id)
+    {
+        //
+    }
+
+    /**
      * Search by options in structure
      *
      * @param string $keyword

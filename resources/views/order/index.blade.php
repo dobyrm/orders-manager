@@ -74,7 +74,7 @@
                         <td>{{ $row->getDate() }}</td>
                         <td>
                             <a href="#" class="btn btn-primary btn-sm">@lang('general.form.btn.edit')</a>
-                            <a href="#" class="btn btn-primary btn-sm">@lang('general.form.btn.delete')</a>
+                            <a href="javascript:void(0);" class="btn btn-primary btn-sm order-destroy" data-id="{{ $row->getId() }}">@lang('general.form.btn.delete')</a>
                         </td>
                     </tr>
                 @endforeach
@@ -91,6 +91,9 @@
             </table>
         </div>
     </div>
+
+@include('components.elements.modals')
+
 @endsection
 
 @section('page.scripts')
